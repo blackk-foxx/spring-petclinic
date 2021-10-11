@@ -27,11 +27,24 @@ version = "2021.1"
 
 project {
 
-    buildType(Build)
+    sequential {
+        parallel {
+            buildType(A) {
+
+            }
+
+            buildType(B) {
+
+            }
+        }
+        buildType(C) {
+
+        }
+    }
 }
 
-object Build : BuildType({
-    name = "Build"
+object A : BuildType({
+    name = "A"
 
     vcs {
         root(DslContext.settingsRoot)
@@ -42,3 +55,26 @@ object Build : BuildType({
         }
     }
 })
+
+object B : BuildType({
+    name = "B"
+
+    vcs {
+        root(DslContext.settingsRoot)
+    }
+
+    triggers {
+        vcs {
+        }
+    }
+})
+
+object C : BuildType({
+    name = "C"
+
+    vcs {
+        root(DslContext.settingsRoot)
+    }
+})
+
+
