@@ -27,6 +27,10 @@ version = "2021.1"
 
 project {
 
+    buildType(A)
+    buildType(B)
+    buildType(C)
+
     sequential {
         parallel {
             buildType(A) {
