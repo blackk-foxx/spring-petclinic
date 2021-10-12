@@ -32,6 +32,7 @@ project {
     buildType(B)
     buildType(C)
 
+    // TODO: Add the nice produces/requires syntactic sugar described in https://blog.jetbrains.com/teamcity/2019/04/configuration-as-code-part-4-extending-the-teamcity-dsl/
     sequential {
         parallel {
             buildType(A) {
@@ -87,6 +88,12 @@ object C : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
+    }
+
+    steps {
+        script {
+            scriptContent = "cat *.txt"
+        }
     }
 
     dependencies.artifacts(A) {
