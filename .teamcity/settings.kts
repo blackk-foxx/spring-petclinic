@@ -37,18 +37,26 @@ project {
 
     sequential {
         parallel {
-            buildType(A) {
-
-            }
-
-            buildType(B) {
-
-            }
+            buildType(A).produces("?.txt")
+            buildType(B).produces("?.txt")
         }
-        buildType(C) {
-
-        }
+        buildType(C)
+            .requires(A, "?.txt")
+            .requires(B, "?.txt")
+            .produces("?.txt")
     }
+}
+
+fun BuildType.produces(artifactRules: String): BuildType {
+    this.artifactRules = artifactRules
+    return this
+}
+
+fun BuildType.requires(upstream: BuildType, artifactRules: String): BuildType {
+    dependencies.artifacts(upstream) {
+        this.artifactRules = artifactRules
+    }
+    return this
 }
 
 object A : MyBuildType({
@@ -59,8 +67,6 @@ object A : MyBuildType({
             scriptContent = "echo A > a.txt"
         }
     }
-
-    artifactRules = "?.txt"
 })
 
 object B : MyBuildType({
@@ -71,8 +77,6 @@ object B : MyBuildType({
             scriptContent = "echo B > b.txt"
         }
     }
-
-    artifactRules = "?.txt"
 })
 
 object C : MyBuildType({
@@ -83,16 +87,6 @@ object C : MyBuildType({
             scriptContent = "cat ?.txt > c.txt; echo C >> c.txt"
         }
     }
-
-    dependencies.artifacts(A) {
-        artifactRules = "?.txt"
-    }
-
-    dependencies.artifacts(B) {
-        artifactRules = "?.txt"
-    }
-
-    artifactRules = "?.txt"
 })
 
 open class MyBuildType(init: MyBuildType.() -> Unit) : BuildType() {
