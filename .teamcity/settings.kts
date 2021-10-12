@@ -80,19 +80,19 @@ object C : MyBuildType({
 
     steps {
         script {
-            scriptContent = "cat *.txt > c.txt; echo C >> c.txt"
+            scriptContent = "cat ?.txt > c.txt; echo C >> c.txt"
         }
     }
 
     dependencies.artifacts(A) {
-        artifactRules = "*.txt"
+        artifactRules = "?.txt"
     }
 
     dependencies.artifacts(B) {
-        artifactRules = "*.txt"
+        artifactRules = "?.txt"
     }
 
-    artifactRules = "*.txt"
+    artifactRules = "?.txt"
 })
 
 open class MyBuildType(init: MyBuildType.() -> Unit) : BuildType() {
