@@ -26,10 +26,13 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 
 version = "2021.1"
 
-
-// TODO: Use the nice produces/requires syntax described in https://blog.jetbrains.com/teamcity/2019/04/configuration-as-code-part-4-extending-the-teamcity-dsl/
-
 project {
+
+    params {
+        param("env.PROJECT_PARAM_A", "")
+        text(name = "env.PROJECT_PARAM_B", value = "project-level B default", label = "label",
+             description = "description", display = ParameterDisplay.PROMPT, allowEmpty = false)
+    }
 
     buildType(A)
     buildType(B)
@@ -62,9 +65,15 @@ fun BuildType.requires(upstream: BuildType, artifactRules: String): BuildType {
 object A : MyBuildType({
     name = "A"
 
+    params {
+        param("env.BUILD_A_PARAM_A", "")
+        text(name = "env.BUILD_A_PARAM_B", value = "build A param B default", label = "label",
+             description = "description", display = ParameterDisplay.PROMPT, allowEmpty = false)
+    }
+
     steps {
         script {
-            scriptContent = "echo A > a.txt"
+            scriptContent = "echo %env.BUILD_A_PARAM_A%, %env.BUILD_A_PARAM_B% > a.txt"
         }
     }
 })
@@ -84,7 +93,7 @@ object C : MyBuildType({
 
     steps {
         script {
-            scriptContent = "cat ?.txt > c.txt; echo C >> c.txt"
+            scriptContent = "cat ?.txt > c.txt; echo C, %env.PROJECT_PARAM_B% >> c.txt"
         }
     }
 })
