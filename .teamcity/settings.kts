@@ -26,13 +26,22 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 
 version = "2021.1"
 
+fun BuildType.produces(artifacts: String) {
+    artifactRules = artifacts
+}
+
+fun BuildType.requires(bt: BuildType, artifacts: String) {
+    dependencies.artifacts(bt) {
+        artifactRules = artifacts
+    }
+}
+
 project {
 
     buildType(A)
     buildType(B)
     buildType(C)
 
-    // TODO: Add the nice produces/requires syntactic sugar described in https://blog.jetbrains.com/teamcity/2019/04/configuration-as-code-part-4-extending-the-teamcity-dsl/
     sequential {
         parallel {
             buildType(A) {
@@ -62,12 +71,12 @@ object A : BuildType({
         }
     }
 
-    artifactRules = "*.txt"
-
     triggers {
         vcs {
         }
     }
+
+    produces("*.txt")
 })
 
 object B : BuildType({
@@ -77,10 +86,18 @@ object B : BuildType({
         root(DslContext.settingsRoot)
     }
 
+    steps {
+        script {
+            scriptContent = "echo B > b.txt"
+        }
+    }
+
     triggers {
         vcs {
         }
     }
+
+    produces("*.txt")
 })
 
 object C : BuildType({
@@ -92,13 +109,13 @@ object C : BuildType({
 
     steps {
         script {
-            scriptContent = "cat *.txt"
+            scriptContent = "cat *.txt > c.txt; echo C >> c.txt"
         }
     }
 
-    dependencies.artifacts(A) {
-        artifactRules = "*.txt"
-    }
+    requires(A, "*.txt")
+    requires(B, "*.txt")
+    produces("*.txt")
 })
 
 
