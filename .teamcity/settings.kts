@@ -1,4 +1,5 @@
 import jetbrains.buildServer.configs.kotlin.v2019_2.*
+import jetbrains.buildServer.configs.kotlin.v2019_2.buildSteps.script
 import jetbrains.buildServer.configs.kotlin.v2019_2.triggers.vcs
 
 /*
@@ -54,6 +55,14 @@ object A : BuildType({
         root(DslContext.settingsRoot)
     }
 
+    steps {
+        script {
+            scriptContent = "echo A > a.txt"
+        }
+    }
+
+    artifactRules = "*.txt"
+
     triggers {
         vcs {
         }
@@ -78,6 +87,10 @@ object C : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
+    }
+
+    dependencies.artifacts(A) {
+        artifactRules = "*.txt"
     }
 })
 
