@@ -51,12 +51,8 @@ project {
     }
 }
 
-object A : BuildType({
+object A : MyBuildType({
     name = "A"
-
-    vcs {
-        root(DslContext.settingsRoot)
-    }
 
     steps {
         script {
@@ -64,20 +60,11 @@ object A : BuildType({
         }
     }
 
-    triggers {
-        vcs {
-        }
-    }
-
-    artifactRules = "*.txt"
+    artifactRules = "?.txt"
 })
 
-object B : BuildType({
+object B : MyBuildType({
     name = "B"
-
-    vcs {
-        root(DslContext.settingsRoot)
-    }
 
     steps {
         script {
@@ -85,20 +72,11 @@ object B : BuildType({
         }
     }
 
-    triggers {
-        vcs {
-        }
-    }
-
-    artifactRules = "*.txt"
+    artifactRules = "?.txt"
 })
 
-object C : BuildType({
+object C : MyBuildType({
     name = "C"
-
-    vcs {
-        root(DslContext.settingsRoot)
-    }
 
     steps {
         script {
@@ -117,4 +95,17 @@ object C : BuildType({
     artifactRules = "*.txt"
 })
 
+open class MyBuildType(init: MyBuildType.() -> Unit) : BuildType() {
+    init {
+        vcs {
+            root(DslContext.settingsRoot)
+        }
+
+        triggers {
+            vcs {
+            }
+        }
+        init()
+    }
+}
 
