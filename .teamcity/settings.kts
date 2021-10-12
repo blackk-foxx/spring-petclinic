@@ -26,15 +26,8 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 
 version = "2021.1"
 
-fun BuildType.produces(artifacts: String) {
-    artifactRules = artifacts
-}
 
-fun BuildType.requires(bt: BuildType, artifacts: String) {
-    dependencies.artifacts(bt) {
-        artifactRules = artifacts
-    }
-}
+// TODO: Use the nice produces/requires syntax described in https://blog.jetbrains.com/teamcity/2019/04/configuration-as-code-part-4-extending-the-teamcity-dsl/
 
 project {
 
@@ -76,7 +69,7 @@ object A : BuildType({
         }
     }
 
-    produces("*.txt")
+    artifactRules = "*.txt"
 })
 
 object B : BuildType({
@@ -97,7 +90,7 @@ object B : BuildType({
         }
     }
 
-    produces("*.txt")
+    artifactRules = "*.txt"
 })
 
 object C : BuildType({
@@ -113,9 +106,15 @@ object C : BuildType({
         }
     }
 
-    requires(A, "*.txt")
-    requires(B, "*.txt")
-    produces("*.txt")
+    dependencies.artifacts(A) {
+        artifactRules = "*.txt"
+    }
+
+    dependencies.artifacts(B) {
+        artifactRules = "*.txt"
+    }
+
+    artifactRules = "*.txt"
 })
 
 
