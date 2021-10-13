@@ -73,7 +73,7 @@ object A : MyBuildType({
 
     steps {
         script {
-            scriptContent = "echo %env.BUILD_A_PARAM_A%, %env.BUILD_A_PARAM_B% > a.txt"
+            scriptContent = "echo \$BUILD_A_PARAM_A, \$BUILD_A_PARAM_B > a.txt"
         }
     }
 })
@@ -98,7 +98,7 @@ object C : MyBuildType({
 
     steps {
         script {
-            scriptContent = "cat ?.txt > c.txt; echo C, %env.PROJECT_PARAM_B% >> c.txt"
+            scriptContent = "cat ?.txt > c.txt; echo C, \$PROJECT_PARAM_B >> c.txt"
         }
     }
 })
