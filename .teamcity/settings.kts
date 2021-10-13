@@ -30,8 +30,8 @@ project {
 
     params {
         param("env.PROJECT_PARAM_A", "")
-        text(name = "env.PROJECT_PARAM_B", value = "project-level B default", label = "label",
-             description = "description", display = ParameterDisplay.PROMPT, allowEmpty = false)
+        text(name = "env.PROJECT_PARAM_B", value = "project-level B default", label = "Project-level param B",
+             description = "Description for project-level param B", display = ParameterDisplay.PROMPT, allowEmpty = false)
     }
 
     buildType(A)
@@ -67,8 +67,8 @@ object A : MyBuildType({
 
     params {
         param("env.BUILD_A_PARAM_A", "")
-        text(name = "env.BUILD_A_PARAM_B", value = "build A param B default", label = "label",
-             description = "description", display = ParameterDisplay.PROMPT, allowEmpty = false)
+        text(name = "env.BUILD_A_PARAM_B", value = "build A param B default", label = "Build A param B",
+             description = "Description for build A param B", display = ParameterDisplay.PROMPT, allowEmpty = false)
     }
 
     steps {
@@ -90,6 +90,11 @@ object B : MyBuildType({
 
 object C : MyBuildType({
     name = "C"
+
+    params {
+        text(name = "reverse.dep." + A.id + "env.BUILD_A_PARAM_A", value = "", label = "Build A param A",
+             description = "Description for build A param A", display = ParameterDisplay.PROMPT)
+    }
 
     steps {
         script {
