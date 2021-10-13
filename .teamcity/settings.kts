@@ -92,7 +92,7 @@ object C : MyBuildType({
     name = "C"
 
     params {
-        text(name = "reverse.dep." + A.id + "env.BUILD_A_PARAM_A", value = "", label = "Build A param A",
+        text(name = "reverse.dep.${A.id}.env.BUILD_A_PARAM_A", value = "", label = "Build A param A",
              description = "Description for build A param A", display = ParameterDisplay.PROMPT)
     }
 
