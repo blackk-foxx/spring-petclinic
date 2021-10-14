@@ -102,7 +102,11 @@ object C : MyBuildType({
 
     steps {
         script {
-            scriptContent = "cat ?.txt > c.txt; echo C, \$PROJECT_PARAM_B >> c.txt"
+            scriptContent = """
+                rm *.txt
+                cat ?.txt > c.txt
+                echo C, ${'$'}PROJECT_PARAM_B >> c.txt"
+            """.trimIndent()
         }
     }
 })
