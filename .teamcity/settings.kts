@@ -103,7 +103,6 @@ object C : MyBuildType({
     steps {
         script {
             scriptContent = """
-                rm *.txt
                 cat ?.txt > c.txt
                 echo C, ${'$'}PROJECT_PARAM_B >> c.txt"
             """.trimIndent()
@@ -115,6 +114,7 @@ open class MyBuildType(init: MyBuildType.() -> Unit) : BuildType() {
     init {
         vcs {
             root(DslContext.settingsRoot)
+            cleanCheckout = true
         }
 
         triggers {
