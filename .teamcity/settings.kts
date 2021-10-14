@@ -66,14 +66,18 @@ object A : MyBuildType({
     name = "A"
 
     params {
-        param("env.BUILD_A_PARAM_A", "")
+        param("env.BUILD_A_PARAM_A", "build A param A default")
         text(name = "env.BUILD_A_PARAM_B", value = "build A param B default", label = "Build A param B",
              description = "Description for build A param B", display = ParameterDisplay.PROMPT, allowEmpty = false)
     }
 
     steps {
         script {
-            scriptContent = "echo \$BUILD_A_PARAM_A, \$BUILD_A_PARAM_B > a.txt"
+            scriptContent = """
+                echo BUILD_A_PARAM_A=${'$'}BUILD_A_PARAM_A
+                echo BUILD_A_PARAM_B=${'$'}BUILD_A_PARAM_B
+                echo ${'$'}BUILD_A_PARAM_A, ${'$'}BUILD_A_PARAM_B > a.txt
+            """.trimIndent()
         }
     }
 })
