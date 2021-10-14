@@ -104,7 +104,7 @@ object C : MyBuildType({
         script {
             scriptContent = """
                 cat ?.txt > c.txt
-                echo C, ${'$'}PROJECT_PARAM_B >> c.txt"
+                echo C, ${'$'}PROJECT_PARAM_B >> c.txt
             """.trimIndent()
         }
     }
