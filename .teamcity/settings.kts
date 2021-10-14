@@ -30,6 +30,10 @@ project {
 
     params {
         param("env.PROJECT_PARAM_A", "")
+
+        // NOTE: Interesting effect of display = ParameterDisplay.PROMPT for a project parameter: The value provided
+        //   by the user for the prompt affects the parameter value only in the build configuration that displayed
+        //   the prompt; all other build configurations will use the default value.
         text(name = "env.PROJECT_PARAM_B", value = "project-level B default", label = "Project-level param B",
              description = "Description for project-level param B", display = ParameterDisplay.PROMPT, allowEmpty = false)
     }
